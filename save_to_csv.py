@@ -4,6 +4,17 @@ import os
 from video_file import VideoFile
 
 
+def try_extract(extract_func, file, description):
+    try:
+        return extract_func()
+    except Exception as e:
+        print(f"Error retrieving {description} for file: {file} - {e}")
+        return e
+
+
+
+
+
 def save_to_csv(video_files):
     """Saves the list of video files to a CSV file."""
     
@@ -32,11 +43,14 @@ def save_to_csv(video_files):
         # Write the data rows, with formatting and rounding
         for video_file in video_files:
             file = video_file.file_path
-            bitrate_in_mbps = f"{video_file.get_bitrate() / 1_000_000:.1f}"  # Format to 1 decimal place
-            size_in_mb = f"{video_file.get_filesize() / (1024 * 1024):.1f}"  # Format to 1 decimal place
-            length = f"{video_file.get_duration():.1f}"  # Format to 1 decimal place
-            crc32 = video_file.compute_partial_file_crc32()
+            bitrate_in_mbps = try_extract(lambda: f"{video_file.get_bitrate() / 1_000_000:.1f}", file, "bitrate")
+            size_in_mb = try_extract(lambda: f"{video_file.get_filesize() / (1024 * 1024):.1f}", file, "filesize")
+            length = try_extract(lambda: f"{video_file.get_duration():.1f}", file, "duration")
+            crc32 = try_extract(video_file.compute_partial_file_crc32, file, "CRC32")
             writer.writerow([file, bitrate_in_mbps, size_in_mb, length, crc32])
+
+                
+                
     return output_file
 
 
