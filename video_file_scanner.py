@@ -37,17 +37,3 @@ def scan_directory(directory):
     sys.stdout.write("\n")
     
     return video_files
-
-
-# Old version
-# def scan_directory(directory):
-#     """Recursively scan a directory for video files and return a list of VideoFile objects."""
-#     video_files = []
-    
-#     for root, _, files in os.walk(directory):
-#         for file in files:
-#             if is_video_file(file):
-#                 video_file = VideoFile(os.path.join(root, file))
-#                 video_files.append(video_file)
-    
-#     return video_files

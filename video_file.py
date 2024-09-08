@@ -24,25 +24,25 @@ class VideoFile:
             if track.track_type == 'Video':
                 duration_in_ms = track.duration
                 if duration_in_ms is not None:
-                    return int(duration_in_ms) / 1000
-        return None
+                    return int(float(duration_in_ms)) / 1000
+        return 0
 
     @lru_cache(maxsize=None)
     def get_filesize(self):
         """Returns the file size in bytes."""
         return os.path.getsize(self.file_path)
 
-    @lru_cache(maxsize=None)
+    # @lru_cache(maxsize=None)
     def get_bitrate(self):
         """Calculates and returns the bitrate of the video in bits per second."""
         duration = self.get_duration()
         if duration is not None and duration > 0:
             filesize = self.get_filesize()  # in bytes
             return (filesize * 8) / duration
-        return None
+        return 0
 
-    @lru_cache(maxsize=None)
-    def compute_partial_file_crc32(self, block_size=1048576 * 8):  # 8 MB by default
+    # @lru_cache(maxsize=None)
+    def compute_partial_file_crc32(self, block_size=32768):  # 1048576 being 1 MB
         """Computes the CRC32 hash of only the first block_size bytes of the video file."""
         file_hash = 0
         with open(self.file_path, 'rb') as f:
