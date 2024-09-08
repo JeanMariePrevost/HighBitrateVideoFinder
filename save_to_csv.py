@@ -3,7 +3,7 @@ import datetime
 import os
 from video_file import VideoFile
 
-
+# Wrapper for a function or lambda that extracts a value from a file, allowing to handle errors and get the error message
 def try_extract(extract_func, file, description):
     try:
         return extract_func()
@@ -49,6 +49,8 @@ def save_to_csv(video_files):
             crc32 = try_extract(video_file.compute_partial_file_crc32, file, "CRC32")
             writer.writerow([file, bitrate_in_mbps, size_in_mb, length, crc32])
 
+
+        
                 
                 
     return output_file

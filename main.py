@@ -13,6 +13,9 @@ if __name__ == "__main__":
     
     #Print results overview
     print(f"\nFound {len(video_files)} video files in [{directory}]")
+    
+    #sort the video files by bitrate
+    video_files.sort(key=lambda x: x.get_bitrate(), reverse=True)
         
     # Save the results list to the CSV
     output_file = save_to_csv(video_files)
